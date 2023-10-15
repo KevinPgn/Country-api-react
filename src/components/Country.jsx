@@ -3,6 +3,7 @@ import { useFetch } from '../hooks/useFetch'
 
 import Header from './Header'
 import Filter from './Filter'
+import Popup from './Popup'
 
 import loader from "../assets/loader.svg"
 
@@ -11,6 +12,7 @@ export default function Country() {
   
     const [value, setValue] = useState('')
     const [region, setRegion] = useState('')
+    const [id, setId] = useState('')
 
     const filterCountry = response && response.filter((country) => {
         return country.name.common.toLowerCase().includes(value.toLowerCase()) && country.region.toLowerCase().includes(region.toLowerCase())
@@ -18,17 +20,22 @@ export default function Country() {
         return b.population - a.population
     })
 
+    const countryId = response && response.find((country) => {
+        return country.cca2 === id
+    })
+    
     return (
     <>
     <Header />
     <Filter value={value} setValue={setValue} region={region} setRegion={setRegion}/>
+    <Popup countryId={countryId}/>
     <div className="country">
 
         {loading && <img src={loader} alt="loader" className="loader" />}
         {error && <p className="error">Error: {error}</p>}
 
         {response && filterCountry.map((country) => (
-            <div className='card' key={country.cca2}>
+            <div className='card' key={country.cca2} onClick={() => setId(country.cca2)}>
                 <div className="top-card">
                     <img src={country.flags.png} alt={country.name.common} />
                 </div>
