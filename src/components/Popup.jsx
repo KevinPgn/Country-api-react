@@ -1,15 +1,13 @@
 import React, { useState } from 'react'
 
-export default function Popup({ countryId }) {
-    const [isActive, setActive] = useState(false);
-
+export default function Popup({ countryId, isActive, setIsActive }) {
     return (
         <>
         {countryId && (
             <div className={`popup ${isActive ? 'active' : ''}`}>
                  <div className="popup-header">
                      <img src={countryId.flags.png} alt={countryId.name.common} />
-                     <button>X</button>   
+                     <button onClick={() => setIsActive(false)}>X</button>   
                 </div>
                 <div className="popup-info">
                     <h3 className='country-name'>{countryId.name.common}</h3>

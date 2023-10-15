@@ -13,6 +13,7 @@ export default function Country() {
     const [value, setValue] = useState('')
     const [region, setRegion] = useState('')
     const [id, setId] = useState('')
+    const [isActive, setIsActive] = useState(false)
 
     const filterCountry = response && response.filter((country) => {
         return country.name.common.toLowerCase().includes(value.toLowerCase()) && country.region.toLowerCase().includes(region.toLowerCase())
@@ -23,19 +24,24 @@ export default function Country() {
     const countryId = response && response.find((country) => {
         return country.cca2 === id
     })
-    
+
+    const handleActiveId = (id) => {
+        setIsActive(true)
+        setId(id)
+    }   
+
     return (
     <>
     <Header />
     <Filter value={value} setValue={setValue} region={region} setRegion={setRegion}/>
-    <Popup countryId={countryId}/>
+    <Popup countryId={countryId} isActive={isActive} setIsActive={setIsActive}/>
     <div className="country">
 
         {loading && <img src={loader} alt="loader" className="loader" />}
         {error && <p className="error">Error: {error}</p>}
 
         {response && filterCountry.map((country) => (
-            <div className='card' key={country.cca2} onClick={() => setId(country.cca2)}>
+            <div className='card' key={country.cca2} onClick={() => handleActiveId(country.cca2)}>
                 <div className="top-card">
                     <img src={country.flags.png} alt={country.name.common} />
                 </div>
